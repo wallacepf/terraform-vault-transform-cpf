@@ -43,3 +43,4 @@ terraform.rc
 guy_vault/
 docker-compose.yml
 tmp/
+scripts/

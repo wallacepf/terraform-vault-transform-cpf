@@ -116,6 +116,12 @@ variable "rds_allowed_cidr_blocks" {
   default     = []
 }
 
+variable "rds_publicly_accessible" {
+  description = "Quando true, o RDS recebe um endpoint público. Usar apenas para testes — em produção mantenha false e acesse via VPC."
+  type        = bool
+  default     = false
+}
+
 variable "aws_region" {
   description = "Região AWS (necessária apenas quando create_rds = true)"
   type        = string

@@ -44,3 +44,4 @@ guy_vault/
 docker-compose.yml
 tmp/
 scripts/
+.DS_Store

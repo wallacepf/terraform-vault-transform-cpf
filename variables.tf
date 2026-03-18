@@ -25,31 +25,63 @@ variable "db_name" {
 }
 
 variable "db_user" {
-  description = "Usuário de runtime do PostgreSQL (SELECT/INSERT/UPDATE)"
+  description = <<-EOT
+    Nome do usuário PostgreSQL que o Vault utilizará para se conectar ao banco.
+
+    Comportamento conforme o cenário:
+      1. create_rds = false
+         O usuário já deve existir no banco externo com as permissões adequadas.
+         Este valor é usado diretamente pelo Vault na connection string.
+
+      2. create_rds = true, action NÃO invocada
+         O RDS é provisionado mas o usuário NÃO é criado pelo Terraform.
+         O valor deve corresponder a um usuário que será criado manualmente
+         antes do Vault tentar se conectar.
+
+      3. create_rds = true, action invocada
+         (terraform apply -invoke=action.local_command.create_vault_user)
+         Este valor define o nome do usuário que será criado no banco com
+         permissões mínimas (CONNECT + USAGE/CREATE no schema public).
+  EOT
   type        = string
 }
 
 variable "db_password" {
-  description = "Senha do usuário de runtime"
-  type        = string
-  sensitive   = true
-}
+  description = <<-EOT
+    Senha do usuário PostgreSQL que o Vault utilizará para se conectar ao banco.
 
-variable "ddl_user" {
-  description = "Usuário DDL do PostgreSQL para inicialização do schema (CREATE TABLE)"
-  type        = string
-}
+    Comportamento conforme o cenário:
+      1. create_rds = false
+         Senha do usuário já existente no banco externo.
 
-variable "ddl_password" {
-  description = "Senha do usuário DDL"
-  type        = string
-  sensitive   = true
+      2. create_rds = true, action NÃO invocada
+         Senha do usuário que será criado manualmente no banco.
+
+      3. create_rds = true, action invocada
+         (terraform apply -invoke=action.local_command.create_vault_user)
+         Senha que será definida para o usuário criado pela action.
+  EOT
+  type      = string
+  sensitive = true
 }
 
 variable "db_sslmode" {
   description = "PostgreSQL sslmode: 'require' para produção, 'disable' para testes locais sem TLS"
   type        = string
   default     = "require"
+}
+
+variable "db_admin_user" {
+  description = "Usuário master do RDS / administrador do PostgreSQL (com CREATEROLE). Usado para criar o db_user via script após o RDS subir. Obrigatório quando create_rds = true."
+  type        = string
+  default     = ""
+}
+
+variable "db_admin_password" {
+  description = "Senha do usuário administrador do PostgreSQL (db_admin_user). Obrigatório quando create_rds = true."
+  type        = string
+  sensitive   = true
+  default     = ""
 }
 
 # ── Variáveis exclusivas do RDS (usadas apenas quando create_rds = true) ─────

@@ -1,5 +1,4 @@
 # Busca a VPC default quando create_rds = true e rds_vpc_id não foi fornecido.
-# Funciona tanto para AWS real quanto para LocalStack (que cria uma VPC default ao iniciar).
 data "aws_vpc" "default" {
   count   = var.create_rds && var.rds_vpc_id == "" ? 1 : 0
   default = true

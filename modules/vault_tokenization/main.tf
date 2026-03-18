@@ -43,8 +43,8 @@ resource "vault_generic_endpoint" "store_schema" {
   disable_read         = true
 
   data_json = jsonencode({
-    username            = var.ddl_user
-    password            = var.ddl_password
+    username            = var.db_user
+    password            = var.db_password
     transformation_type = "tokenization"
   })
 

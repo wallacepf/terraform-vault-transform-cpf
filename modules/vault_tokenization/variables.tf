@@ -36,17 +36,6 @@ variable "db_password" {
   sensitive   = true
 }
 
-variable "ddl_user" {
-  description = "PostgreSQL DDL user for schema initialization (CREATE TABLE)"
-  type        = string
-}
-
-variable "ddl_password" {
-  description = "PostgreSQL DDL user password"
-  type        = string
-  sensitive   = true
-}
-
 variable "db_sslmode" {
   description = "PostgreSQL sslmode: 'require' para produção, 'disable' para testes locais sem TLS"
   type        = string

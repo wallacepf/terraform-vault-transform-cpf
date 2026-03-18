@@ -43,3 +43,9 @@ variable "allowed_cidr_blocks" {
   default     = []
 }
 
+variable "publicly_accessible" {
+  description = "Quando true, o RDS recebe um endpoint público. Usar apenas para testes — em produção mantenha false e acesse via VPC."
+  type        = bool
+  default     = false
+}
+

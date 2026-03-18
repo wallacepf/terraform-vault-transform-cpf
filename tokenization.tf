@@ -19,7 +19,12 @@ module "rds" {
   subnet_ids          = local.resolved_subnet_ids
   instance_class      = var.rds_instance_class
   allowed_cidr_blocks = var.rds_allowed_cidr_blocks
+  publicly_accessible = var.rds_publicly_accessible
+
 }
+
+
+
 
 module "vault_tokenization" {
   source = "./modules/vault_tokenization"
